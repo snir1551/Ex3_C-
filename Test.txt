@@ -1,0 +1,12 @@
+    Tree T2("Dani");
+    T2.addFather("Dani", "Yogev")  
+	 .addMother("Dani", "Maksima")   
+	 .addFather("Yogev", "Ronen")
+	 .addMother("Yogev", "Rivka")
+	 .addFather("Ronen", "Avraham")
+	 .addFather("Avraham", "mashlim")
+     .addFather("mashlim","Gadi")
+     .addMother("mashlim","Shushan")
+     .addFather("Gadi","Yogev");
+
+	T2.remove("Avraham");
