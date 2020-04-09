@@ -488,6 +488,28 @@ TEST_CASE("Test remove")
 }
 
 
+TEST_CASE("Test remove exception")
+{
+    Tree T2("Dani");
+    T2.addFather("Dani", "Asaf")  
+	 .addMother("Dani", "Maksima")   
+	 .addFather("Asaf", "Ronen")
+	 .addMother("Asaf", "Rivka")
+	 .addFather("Ronen", "Avraham")
+	 .addFather("Avraham", "mashlim")
+     .addFather("mashlim","Gadi")
+     .addMother("mashlim","Shushan")
+     .addFather("Gadi","Yogev")
+     .addMother("Shushan","lilach");
+
+     CHECK_THROWS(T2.remove("Golan"));
+     CHECK_THROWS(T2.remove("Asa"));
+     CHECK_THROWS(T2.remove("asaf"));
+     CHECK_THROWS(T2.remove("ASaf"));
+     CHECK_THROWS(T2.remove("Dani"));
+
+}
+
 TEST_CASE("Complex Test")
 {
     Tree T2("Dani");
@@ -517,7 +539,57 @@ TEST_CASE("Complex Test")
      CHECK_THROWS(T2.find(relationSearch1)); // Asaf
      string relationSearch3 = T2.relation(findSearch1); // father
      CHECK(relationSearch3 == "unrelated");
+
+     Tree T3("Gadi");
+     T3.addFather("Gadi","Haim")
+       .addFather("Haim","Moshe")
+       .addFather("Moshe","Meshulam")
+       .addFather("Meshulam","Shimshon")
+       .addMother("Shimshon","zafrit")
+       .addFather("Shimshon","ShimshonI")
+       .addMother("zafrit","zohar")
+       .addMother("zohar","zomer")
+       .addFather("zomer","hatuka");
+
      
+
+     CHECK(T3.find("me") == "Gadi");
+     CHECK(T3.find("father") == "Haim");
+     CHECK(T3.find("grandfather") == "Moshe");
+     CHECK(T3.find("great-grandfather") == "Meshulam");
+     CHECK(T3.find("great-great-grandfather") == "Shimshon");
+     CHECK(T3.find("great-great-great-grandmother") == "zafrit");
+     CHECK(T3.find("great-great-great-great-grandmother") == "zohar");
+     CHECK(T3.find("great-great-great-great-great-grandmother") == "zomer");
+     CHECK(T3.find("great-great-great-great-great-great-grandfather") == "hatuka");
+
+     T3.remove("hatuka");
+
+     CHECK(T3.find("me") == "Gadi");
+     CHECK(T3.find("father") == "Haim");
+     CHECK(T3.find("grandfather") == "Moshe");
+     CHECK(T3.find("great-grandfather") == "Meshulam");
+     CHECK(T3.find("great-great-grandfather") == "Shimshon");
+     CHECK(T3.find("great-great-great-grandmother") == "zafrit");
+     CHECK(T3.find("great-great-great-great-grandmother") == "zohar");
+     CHECK(T3.find("great-great-great-great-great-grandmother") == "zomer");
+     CHECK(T3.relation("hatuka") == "unrelated");
+
+     T3.addFather("zomer","hatuka");
+     T3.remove("ShimshonI");
+
+     CHECK(T3.find("me") == "Gadi");
+     CHECK(T3.find("father") == "Haim");
+     CHECK(T3.find("grandfather") == "Moshe");
+     CHECK(T3.find("great-grandfather") == "Meshulam");
+     CHECK(T3.find("great-great-grandfather") == "Shimshon");
+     CHECK(T3.find("great-great-great-grandmother") == "zafrit");
+     CHECK(T3.find("great-great-great-great-grandmother") == "zohar");
+     CHECK(T3.find("great-great-great-great-great-grandmother") == "zomer");
+     CHECK(T3.find("great-great-great-great-great-great-grandfather") == "hatuka");
+     CHECK(T3.relation("ShimshonI") == "unrelated");
+
+
 
 }
 
